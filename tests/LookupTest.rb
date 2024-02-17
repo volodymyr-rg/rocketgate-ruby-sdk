@@ -24,65 +24,51 @@ require_relative 'BaseTestCase'
 
 module RocketGate
 
-class LookupTest < BaseTestCase
-  def getTestName
-    "LookupTest"
+  class LookupTest < BaseTestCase
+    def getTestName
+      "LookupTest"
+    end
+
+    def test_lookup
+      @request.Set(GatewayRequest::CURRENCY, "USD")
+      @request.Set(GatewayRequest::AMOUNT, "9.99") # bill 9.99 now
+
+      @request.Set(GatewayRequest::BILLING_ADDRESS, "123 Main St")
+      @request.Set(GatewayRequest::BILLING_CITY, "Las Vegas")
+      @request.Set(GatewayRequest::BILLING_STATE, "NV")
+      @request.Set(GatewayRequest::BILLING_ZIPCODE, "89141")
+      @request.Set(GatewayRequest::BILLING_COUNTRY, "US")
+
+      # Risk/Scrub Request Setting
+      @request.Set(GatewayRequest::SCRUB, "IGNORE")
+      @request.Set(GatewayRequest::CVV2_CHECK, "IGNORE")
+      @request.Set(GatewayRequest::AVS_CHECK, "IGNORE")
+
+      #
+      #	Perform the Auth-Only transaction.
+      #
+      assert_equal true,
+                   @service.PerformAuthOnly(@request, @response),
+                   "Perform Auth Only"
+
+      # Run additional purchase using  MERCHANT_INVOICE_ID
+      #
+      #  This would normally be two separate processes,
+      #  but for example's sake is in one process (thus we clear and set a new GatewayRequest object)
+      #  The key values required is MERCHANT_INVOICE_ID.
+      #
+      request = GatewayRequest.new
+      request.Set(GatewayRequest::MERCHANT_ID, @merchantId)
+      request.Set(GatewayRequest::MERCHANT_PASSWORD, @merchantPassword)
+
+      request.Set(GatewayRequest::MERCHANT_INVOICE_ID, @invoiceId)
+
+      #
+      #	Perform the lookup transaction.
+      #
+      assert_equal true,
+                   @service.PerformLookup(request, @response),
+                   "Perform Lookup"
+    end
   end
-
-  def test_lookup
-    puts "222"
-    @request.Set(GatewayRequest::CURRENCY, "USD")
-    @request.Set(GatewayRequest::AMOUNT, "9.99") # bill 9.99 now
-
-    @request.Set(GatewayRequest::BILLING_ADDRESS, "123 Main St")
-    @request.Set(GatewayRequest::BILLING_CITY, "Las Vegas")
-    @request.Set(GatewayRequest::BILLING_STATE, "NV")
-    @request.Set(GatewayRequest::BILLING_ZIPCODE, "89141")
-    @request.Set(GatewayRequest::BILLING_COUNTRY, "US")
-
-    # Risk/Scrub Request Setting
-    @request.Set(GatewayRequest::SCRUB, "IGNORE")
-    @request.Set(GatewayRequest::CVV2_CHECK, "IGNORE")
-    @request.Set(GatewayRequest::AVS_CHECK, "IGNORE")
-
-    # @service.PerformAuthOnly(@request, @response)
-    #
-    # puts "Response Code: " << @response.Get(GatewayResponse::RESPONSE_CODE)
-    # puts "Reason Code: " << @response.Get(GatewayResponse::REASON_CODE)
-    # puts "Exception: " << @response.Get(GatewayResponse::EXCEPTION)
-    # puts "GUID: " << @response.Get(GatewayResponse::TRANSACT_ID)
-    # puts "AuthNo: " << @response.Get(GatewayResponse::AUTH_NO)
-    # puts "AVS: " << @response.Get(GatewayResponse::AVS_RESPONSE)
-    # puts "CVV2: " << @response.Get(GatewayResponse::CVV2_CODE)
-    # puts "CardHash: " << @response.Get(GatewayResponse::CARD_HASH)
-    # puts "Account: " << @response.Get(GatewayResponse::MERCHANT_ACCOUNT)
-    # puts "Scrub: " << @response.Get(GatewayResponse::SCRUB_RESULTS)
-    
-    #
-    #	Perform the Auth-Only transaction.
-    #
-    assert_equal true,
-                 @service.PerformAuthOnly(@request, @response),
-                 "Perform Auth Only"
-
-    # Run additional purchase using  MERCHANT_INVOICE_ID
-    #
-    #  This would normally be two separate processes,
-    #  but for example's sake is in one process (thus we clear and set a new GatewayRequest object)
-    #  The key values required is MERCHANT_INVOICE_ID.
-    #
-    request = GatewayRequest.new
-    request.Set(GatewayRequest::MERCHANT_ID, @merchantId)
-    request.Set(GatewayRequest::MERCHANT_PASSWORD, @merchantPassword)
-
-    request.Set(GatewayRequest::MERCHANT_INVOICE_ID, @invoiceId)
-
-    #
-    #	Perform the lookup transaction.
-    #
-    assert_equal true,
-                 @service.PerformLookup(request, @response),
-                 "Perform Lookup"
-  end
-end
 end
