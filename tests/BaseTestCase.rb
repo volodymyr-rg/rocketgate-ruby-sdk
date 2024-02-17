@@ -23,8 +23,8 @@ module RocketGate
 
       # Customer data
       @request.Set(GatewayRequest::CUSTOMER_FIRSTNAME, "Joe")
-      @request.Set(GatewayRequest::CUSTOMER_LASTNAME, "PHPTester")
-      @request.Set(GatewayRequest::EMAIL, "phptest@fakedomain.com")
+      @request.Set(GatewayRequest::CUSTOMER_LASTNAME, "RubyTester")
+      @request.Set(GatewayRequest::EMAIL, "rubytest@fakedomain.com")
 
       # Credit card data
       @request.Set(GatewayRequest::CARDNO, "4111111111111111")
