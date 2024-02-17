@@ -45,6 +45,19 @@ class LookupTest < BaseTestCase
     @request.Set(GatewayRequest::CVV2_CHECK, "IGNORE")
     @request.Set(GatewayRequest::AVS_CHECK, "IGNORE")
 
+    # @service.PerformAuthOnly(@request, @response)
+    #
+    # puts "Response Code: " << @response.Get(GatewayResponse::RESPONSE_CODE)
+    # puts "Reason Code: " << @response.Get(GatewayResponse::REASON_CODE)
+    # puts "Exception: " << @response.Get(GatewayResponse::EXCEPTION)
+    # puts "GUID: " << @response.Get(GatewayResponse::TRANSACT_ID)
+    # puts "AuthNo: " << @response.Get(GatewayResponse::AUTH_NO)
+    # puts "AVS: " << @response.Get(GatewayResponse::AVS_RESPONSE)
+    # puts "CVV2: " << @response.Get(GatewayResponse::CVV2_CODE)
+    # puts "CardHash: " << @response.Get(GatewayResponse::CARD_HASH)
+    # puts "Account: " << @response.Get(GatewayResponse::MERCHANT_ACCOUNT)
+    # puts "Scrub: " << @response.Get(GatewayResponse::SCRUB_RESULTS)
+    
     #
     #	Perform the Auth-Only transaction.
     #
@@ -58,7 +71,7 @@ class LookupTest < BaseTestCase
     #  but for example's sake is in one process (thus we clear and set a new GatewayRequest object)
     #  The key values required is MERCHANT_INVOICE_ID.
     #
-    request = new GatewayRequest()
+    request = GatewayRequest.new
     request.Set(GatewayRequest::MERCHANT_ID, @merchantId)
     request.Set(GatewayRequest::MERCHANT_PASSWORD, @merchantPassword)
 

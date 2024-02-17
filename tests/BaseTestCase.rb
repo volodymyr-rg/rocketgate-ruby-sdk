@@ -6,30 +6,14 @@ require_relative '../GatewayResponse'
 module RocketGate
 class BaseTestCase < Minitest::Test
 
-  # @var GatewayService
-  @service = nil
-
-  # @var GatewayRequest
-  @request = nil
-
-  # @var GatewayResponse
-  @response = nil
-
-  # @var int
-  @merchantId = 1
-
-  # @var string
-  @merchantPassword = 'testpassword'
-
-  # @var string
-  @customerId = nil
-
-  # @var string
-  @invoiceId = nil
-
-  # def initialize(name)
   def setup
     puts ":::"
+
+    # @var int
+    @merchantId = 1
+
+    # @var string
+    @merchantPassword = 'testpassword'
 
     @service = GatewayService.new
     @service.SetTestMode true
